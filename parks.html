@@ -93,15 +93,29 @@
             <a href="#" class="w3-bar-item w3-button">SEARCH</a>
         </div>
     </div>
-      <!-- First Parallax Image with Logo Text -->
-  <div class="bgimg-2 w3-display-container w3-opacity-min" id="home">
-    <div class="w3-display-middle" style="white-space:nowrap;">
-      <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">Explore2Day<span
-          class="w3-hide-small"></span></span>
-  </div>
+    <!-- First Parallax Image with Logo Text -->
+    <div class="bgimg-2 w3-display-container w3-opacity-min" id="home">
+        <div class="w3-display-middle" style="white-space:nowrap;">
+            <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">Explore2Day<span
+                    class="w3-hide-small"></span></span>
+        </div>
     </div>
-  </div>
-    <div class="container" id="cardLocationContainer" class="row d-flex justify-content-center"></div>
+    </div>
+    <div class="container">
+        <div id="selects">
+            <select id="SearchFilter" class="form-select text-bg-dark opacity-75 mb-4">
+                <option id="default">Search Park By:</option>
+                <option id="locations">Location</option>
+                <option id="parkType">Park</option>
+            </select>
+            <select id="locationsList" class="form-select text-bg-dark opacity-75 mb-4"></select>
+            <select id="parkTypeList" class="form-select text-bg-dark opacity-75 mb-4"></select>
+        </div>
+        <p id="extraData" class="h3 text-bg-dark opacity-75 text-center p-4 fw-bold"></p>
+    </div>
+    <div class="container">
+        <div id="cardLocationContainer" class="row d-flex justify-content-center"></div>
+    </div>
 </body>
 
 <!-- Footer -->
@@ -121,4 +135,5 @@
 <script src="/javascript/nationalParkData.js"></script>
 <script src="/javascript/parkTypeData.js"></script>
 <script src="/javascript/scripts.js"></script>
+
 </html>
