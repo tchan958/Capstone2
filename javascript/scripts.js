@@ -1,74 +1,155 @@
-let cardContainer;
-
-var tasks = [
-    {
-        "title": "home",
-        "color": "blue",
-    },
-    {
-        "title": "city",
-        "color": "green",
-    }];
-
-let createTaskCard = (task) => {
-
-  let card = document.createElement('div');
-  card.className = 'card shadow cursor-pointer';
-
-  let cardBody = document.createElement('div');
-  cardBody.className = 'card-body';
-
-  let title = document.createElement('h5');
-  title.innerText = task.title;
-  title.className = 'card-title';
-
-  let color = document.createElement('div');
-  color.innerText = task.color;
-  color.className = 'card-color';
-
-
-  cardBody.appendChild(title);
-  cardBody.appendChild(color);
-  card.appendChild(cardBody);
-  cardContainer.appendChild(card);
-
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
 }
-let initListOfTasks = () => {
-  if (cardContainer) {
-    document.getElementById('card-container').replaceWith(cardContainer);
-    return;
-  }
 
-  cardContainer = document.getElementById('card-container');
-  tasks.forEach((task) => {
-    createTaskCard(task);
-  });
-};
+// Change style of navbar on scroll
+window.onscroll = function() {myFunction()};
+function myFunction() {
+    var navbar = document.getElementById("myNavbar");
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+    } else {
+        navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+    }
+}
 
-initListOfTasks(); // Here you go
-<div id='card-container'></div>
+// Used to toggle the menu on small screens when clicking on the menu button
+function toggleFunction() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
 
-const searchInputDropdown = document.getElementById('search-input-dropdown');
-const dropdownOptions = document.querySelectorAll('.input-group-dropdown-item');
+"use strict";
 
-searchInputDropdown.addEventListener('input', () => {
-  const filter = searchInputDropdown.value.toLowerCase();
-  showOptions();
-  const valueExist = !!filter.length;
+// Init Vars Here
+let SearchFilter = document.getElementById("SearchFilter");
+let locationsList = document.getElementById("locationsList");
+let parkTypeList = document.getElementById("parkTypeList");
+let extraData = document.getElementById("extraData");
 
-  if (valueExist) {
-    dropdownOptions.forEach((el) => {
-      const elText = el.textContent.trim().toLowerCase();
-      const isIncluded = elText.includes(filter);
-      if (!isIncluded) {
-        el.style.display = 'none';
-      }
-    });
-  }
-});
+let parkList = document.getElementById("parkList");
+// Hide When Not Needed
+locationsList.style.display = "none";
+parkTypeList.style.display = "none";
+extraData.style.display = "none";
 
-const showOptions = () => {
-  dropdownOptions.forEach((el) => {
-    el.style.display = 'flex';
-  })
+
+window.onload = function init () {
+    SearchFilter.onchange = addDropdowns;
+    parkTypeList.onchange = searchByParkOnChange;
+    locationsList.onchange = searchByLocationOnChange;
+}
+
+// This Populates the First Search Filter "Search Parks By ..."
+function addDropdowns() {
+    locationsList.style.display = "none";
+    parkTypeList.style.display = "none";
+    extraData.style.display = "none";
+    // If search filter's value is ...
+    if (SearchFilter.value == "Location") {
+        document.getElementById("locationsList").style.display = "block";
+        locationDropdown();
+    } else if (SearchFilter.value == "Park Type") {
+        document.getElementById("parkTypeList").style.display = "block";
+        parkTypeDropdown()
+    } 
+}
+
+// Populates the Select A Location Filter
+function locationDropdown() {
+    console.log("Adding Search by Location Filter...")
+    locationsList.length = 0; // resets location list back to "please select a location"
+
+    extraData.style.display = "none";
+
+    let locationOption = new Option("Select a Location ...", "");
+    locationsList.appendChild(locationOption);
+
+    for (let location of locationsArray){
+        let option = new Option(location, location);
+        locationsList.appendChild(option);
+    }
+}
+
+// Populate the Park Type Dropdown
+function parkTypeDropdown() {
+    console.log("Adding Search by Park Type Filter...")
+    parkTypeList.length = 0;
+
+    extraData.style.display = "none";
+
+    let parkTypeOption = new Option("Please Select a Park Type ...", "");
+    parkTypeList.appendChild(parkTypeOption);
+
+    for (let park of parkTypesArray){
+        let parkOption = new Option(park, park);
+        parkTypeList.appendChild(parkOption);
+    }
+}
+
+// Create Card Maker Function
+function cardMaker(park){
+    let cardLocationContainer = document.getElementById("cardLocationContainer");
+
+    let card = document.createElement("div");
+    card.className = "card col-sm-6 col-lg-3 m-4";
+    cardLocationContainer.appendChild(card);
+
+    let cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+    card.appendChild(cardBody);
+
+    let title = document.createElement("h5");
+    title.className = "card-title";
+    title.innerText = nationalParksArray[park].LocationName;
+    cardBody.appendChild(title);
+
+    let address = document.createElement("p");
+    address.className = "card-text";
+    address.innerText = nationalParksArray[park].Address;
+    cardBody.appendChild(address);
+
+    let cityStateZip = document.createElement("p");
+    cityStateZip.className = "card-text";
+    cityStateZip.innerText = nationalParksArray[park].City + ", " + nationalParksArray[park].State + " " + nationalParksArray[park].ZipCode;
+    cardBody.appendChild(cityStateZip);
+
+    if (nationalParksArray[park].Visit != undefined) {
+        let buttonSelectLocation = document.createElement("a")
+        buttonSelectLocation.className = "btn btn-dark ";
+        buttonSelectLocation.innerHTML = "Visit Us"
+        buttonSelectLocation.href = nationalParksArray[park].Visit;
+        buttonSelectLocation.target = "_blank"
+        cardBody.appendChild(buttonSelectLocation);
+    }
+}
+
+function searchByLocationOnChange() {
+    console.log("Location On Change")
+    cardLocationContainer.innerHTML = "";
+    let selectedLocationOption = document.getElementById("locationsList").value;
+    for (let park in nationalParksArray) {
+        if (selectedLocationOption == nationalParksArray[park].State) {
+            cardMaker(park);
+        }
+    }
+}
+
+function searchByParkOnChange() {
+    console.log("Park Type On Change")
+    cardLocationContainer.innerHTML = "";
+    let selectedParkTypeOption = document.getElementById("parkTypeList").value;
+    for (let park in nationalParksArray) {
+        if ((nationalParksArray[park].LocationName).indexOf(selectedParkTypeOption) != -1) {
+            cardMaker(park);
+        }
+    }
 }
